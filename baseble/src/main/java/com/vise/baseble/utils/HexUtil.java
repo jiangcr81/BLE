@@ -1,6 +1,7 @@
 package com.vise.baseble.utils;
 
-import com.vise.log.ViseLog;
+import android.util.Log;
+
 
 /**
  * @Description: 十六进制转换类
@@ -8,6 +9,7 @@ import com.vise.log.ViseLog;
  * @date: 16/8/7 21:57.
  */
 public class HexUtil {
+    private static String TAG = "HexUtil";
     /**
      * 用于建立十六进制字符的输出的小写字符数组
      */
@@ -87,7 +89,7 @@ public class HexUtil {
      */
     protected static String encodeHexStr(byte[] data, char[] toDigits) {
         if (data == null) {
-            ViseLog.e("this data is null.");
+            Log.e(TAG, "this data is null.");
             return "";
         }
         return new String(encodeHex(data, toDigits));
@@ -101,7 +103,7 @@ public class HexUtil {
      */
     public static byte[] decodeHex(String data) {
         if (data == null) {
-            ViseLog.e("this data is null.");
+            Log.e(TAG, "this data is null.");
             return new byte[0];
         }
         return decodeHex(data.toCharArray());

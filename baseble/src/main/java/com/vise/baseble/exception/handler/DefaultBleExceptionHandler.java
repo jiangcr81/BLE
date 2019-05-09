@@ -1,11 +1,12 @@
 package com.vise.baseble.exception.handler;
 
+import android.util.Log;
+
 import com.vise.baseble.exception.ConnectException;
 import com.vise.baseble.exception.GattException;
 import com.vise.baseble.exception.InitiatedException;
 import com.vise.baseble.exception.OtherException;
 import com.vise.baseble.exception.TimeoutException;
-import com.vise.log.ViseLog;
 
 /**
  * @Description: 异常默认处理
@@ -13,28 +14,30 @@ import com.vise.log.ViseLog;
  * @date: 16/8/14 10:35.
  */
 public class DefaultBleExceptionHandler extends BleExceptionHandler {
+    private static String TAG = "DefaultBleExceptionHandler";
+    
     @Override
     protected void onConnectException(ConnectException e) {
-        ViseLog.e(e.getDescription());
+        Log.e(TAG, e.getDescription());
     }
-
+    
     @Override
     protected void onGattException(GattException e) {
-        ViseLog.e(e.getDescription());
+        Log.e(TAG, e.getDescription());
     }
-
+    
     @Override
     protected void onTimeoutException(TimeoutException e) {
-        ViseLog.e(e.getDescription());
+        Log.e(TAG, e.getDescription());
     }
-
+    
     @Override
     protected void onInitiatedException(InitiatedException e) {
-        ViseLog.e(e.getDescription());
+        Log.e(TAG, e.getDescription());
     }
-
+    
     @Override
     protected void onOtherException(OtherException e) {
-        ViseLog.e(e.getDescription());
+        Log.e(TAG, e.getDescription());
     }
 }

@@ -16,10 +16,10 @@ import com.vise.baseble.model.BluetoothLeDeviceStore;
  */
 public class ScanCallback implements BluetoothAdapter.LeScanCallback, IScanFilter {
     protected Handler handler = new Handler(Looper.myLooper());
-    protected boolean isScan = true;//是否开始扫描
-    protected boolean isScanning = false;//是否正在扫描
-    protected BluetoothLeDeviceStore bluetoothLeDeviceStore;//用来存储扫描到的设备
-    protected IScanCallback scanCallback;//扫描结果回调
+    protected boolean isScan = true;                            //是否开始扫描
+    protected boolean isScanning = false;                       //是否正在扫描
+    protected BluetoothLeDeviceStore bluetoothLeDeviceStore;    //用来存储扫描到的设备
+    protected IScanCallback scanCallback;                       //扫描结果回调
 
     public ScanCallback(IScanCallback scanCallback) {
         this.scanCallback = scanCallback;

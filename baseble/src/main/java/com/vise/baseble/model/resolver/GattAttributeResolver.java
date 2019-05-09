@@ -114,6 +114,7 @@ public class GattAttributeResolver {
     public static final String HEALTH_THERMOMETER = "00001809-0000-1000-8000-00805f9b34fb";
     public static final String DEVICE_INFORMATION = "0000180a-0000-1000-8000-00805f9b34fb";
     public static final String HEART_RATE = "0000180d-0000-1000-8000-00805f9b34fb";
+    public static final String BATTERY_SERVICE = "0000180f-0000-1000-8000-00805f9b34fb";
     public static final String CYCLING_SC = "00001816-0000-1000-8000-00805f9b34fb";
     public static final String CLIENT_CHARACTERISTIC_CONFIG = "00002902-0000-1000-8000-00805f9b34fb";
     public static final String DEVICE_NAME = "00002a00-0000-1000-8000-00805f9b34fb";
@@ -137,6 +138,7 @@ public class GattAttributeResolver {
     public static final String REFERENCE_TIME_INFORMATION = "00002a14-0000-1000-8000-00805f9b34fb";
     public static final String TIME_UPDATE_CONTROL_POINT = "00002a16-0000-1000-8000-00805f9b34fb";
     public static final String TIME_UPDATE_STATE = "00002a17-0000-1000-8000-00805f9b34fb";
+    public static final String BATTERY_CAPACITY = "00002a19-0000-1000-8000-00805f9b34fb";
     public static final String TEMPERATURE_MEASUREMENT = "00002a1c-0000-1000-8000-00805f9b34fb";
     public static final String TEMPERATURE_TYPE = "00002a1d-0000-1000-8000-00805f9b34fb";
     public static final String INTERMEDIATE_TEMPERATURE = "00002a1e-0000-1000-8000-00805f9b34fb";
@@ -300,6 +302,7 @@ public class GattAttributeResolver {
         map.put(HEALTH_THERMOMETER, "Health Thermometer");
         map.put(DEVICE_INFORMATION, "Device Information");
         map.put(HEART_RATE, "HEART_RATE");
+        map.put(BATTERY_SERVICE, "BATTERY_SERVICE");
         map.put(CYCLING_SC, "CYCLING_SC");
         map.put(CLIENT_CHARACTERISTIC_CONFIG, "CLIENT_CHARACTERISTIC_CONFIG");
         map.put(DEVICE_NAME, "Device Name");
@@ -323,6 +326,7 @@ public class GattAttributeResolver {
         map.put(REFERENCE_TIME_INFORMATION, "Reference Time Information");
         map.put(TIME_UPDATE_CONTROL_POINT, "Time Update Control Point");
         map.put(TIME_UPDATE_STATE, "Time Update State");
+        map.put(BATTERY_CAPACITY, "Battery Capacity");
         map.put(TEMPERATURE_MEASUREMENT, "Temperature Measurement");
         map.put(TEMPERATURE_TYPE, "Temperature Type");
         map.put(INTERMEDIATE_TEMPERATURE, "Intermediate Temperature");

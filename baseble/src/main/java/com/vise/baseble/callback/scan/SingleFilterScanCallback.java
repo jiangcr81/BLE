@@ -12,8 +12,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class SingleFilterScanCallback extends ScanCallback {
     private AtomicBoolean hasFound = new AtomicBoolean(false);
-    private String deviceName;//指定设备名称
-    private String deviceMac;//指定设备Mac地址
+    private String deviceName;  //指定设备名称
+    private String deviceMac;   //指定设备Mac地址
+    private String deviceNameExclude;   //排除指定设备名称
 
     public SingleFilterScanCallback(IScanCallback scanCallback) {
         super(scanCallback);
@@ -26,6 +27,11 @@ public class SingleFilterScanCallback extends ScanCallback {
 
     public ScanCallback setDeviceMac(String deviceMac) {
         this.deviceMac = deviceMac;
+        return this;
+    }
+    
+    public ScanCallback setDeviceNameExclude(String deviceNameExclude) {
+        this.deviceNameExclude = deviceNameExclude;
         return this;
     }
 
@@ -42,8 +48,15 @@ public class SingleFilterScanCallback extends ScanCallback {
                 tempDevice = bluetoothLeDevice;
                 bluetoothLeDeviceStore.addDevice(bluetoothLeDevice);
                 scanCallback.onScanFinish(bluetoothLeDeviceStore);
-            } else if (bluetoothLeDevice != null && bluetoothLeDevice.getName() != null && deviceName != null
-                    && deviceName.equalsIgnoreCase(bluetoothLeDevice.getName().trim())) {
+            } else if (bluetoothLeDevice != null && bluetoothLeDevice.getName() != null && deviceName != null && deviceName.equalsIgnoreCase(bluetoothLeDevice.getName().trim())) {
+                hasFound.set(true);
+                isScanning = false;
+                removeHandlerMsg();
+                ViseBle.getInstance().stopScan(SingleFilterScanCallback.this);
+                tempDevice = bluetoothLeDevice;
+                bluetoothLeDeviceStore.addDevice(bluetoothLeDevice);
+                scanCallback.onScanFinish(bluetoothLeDeviceStore);
+            } else if (bluetoothLeDevice != null && bluetoothLeDevice.getName() != null && deviceNameExclude != null && !deviceNameExclude.equalsIgnoreCase(bluetoothLeDevice.getName().trim())) {
                 hasFound.set(true);
                 isScanning = false;
                 removeHandlerMsg();

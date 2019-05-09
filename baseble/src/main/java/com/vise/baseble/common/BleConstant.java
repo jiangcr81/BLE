@@ -10,7 +10,7 @@ public class BleConstant {
 
     public static final int TIME_FOREVER = -1;
 
-    public static final int DEFAULT_SCAN_TIME = 20000;
+    public static final int DEFAULT_SCAN_TIME = 5000;
     public static final int DEFAULT_CONN_TIME = 10000;
     public static final int DEFAULT_OPERATE_TIME = 5000;
 

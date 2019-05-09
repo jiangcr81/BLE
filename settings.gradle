@@ -1,1 +1,1 @@
-include ':baseble', ':newapp'
+include ':baseble', ':bledemo', ':xsnow'

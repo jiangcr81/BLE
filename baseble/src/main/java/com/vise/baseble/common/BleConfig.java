@@ -16,17 +16,17 @@ import static com.vise.baseble.common.BleConstant.DEFAULT_SCAN_TIME;
 public class BleConfig {
     private static BleConfig instance;
 
-    private int scanTimeout = DEFAULT_SCAN_TIME;//扫描超时时间（毫秒）
-    private int connectTimeout = DEFAULT_CONN_TIME;//连接超时时间（毫秒）
-    private int operateTimeout = DEFAULT_OPERATE_TIME;//数据操作超时时间（毫秒）
-    private int connectRetryCount = DEFAULT_RETRY_COUNT;//连接重试次数
-    private int connectRetryInterval = DEFAULT_RETRY_INTERVAL;//连接重试间隔（毫秒）
-    private int operateRetryCount = DEFAULT_RETRY_COUNT;//数据操作重试次数
-    private int operateRetryInterval = DEFAULT_RETRY_INTERVAL;//数据操作重试间隔时间（毫秒）
-    private int maxConnectCount = DEFAULT_MAX_CONNECT_COUNT;//最大连接数量
+    private int scanTimeout = DEFAULT_SCAN_TIME;                    //扫描超时时间（毫秒）
+    private int connectTimeout = DEFAULT_CONN_TIME;                 //连接超时时间（毫秒）
+    private int operateTimeout = DEFAULT_OPERATE_TIME;              //数据操作超时时间（毫秒）
+    private int connectRetryCount = DEFAULT_RETRY_COUNT;            //连接重试次数
+    private int connectRetryInterval = DEFAULT_RETRY_INTERVAL;      //连接重试间隔（毫秒）
+    private int operateRetryCount = DEFAULT_RETRY_COUNT;            //数据操作重试次数
+    private int operateRetryInterval = DEFAULT_RETRY_INTERVAL;      //数据操作重试间隔时间（毫秒）
+    private int maxConnectCount = DEFAULT_MAX_CONNECT_COUNT;        //最大连接数量
 
     //yankee
-    private int scanRepeatInterval = DEFAULT_SCAN_REPEAT_INTERVAL;//每隔X时间重复扫描 (毫秒)
+    private int scanRepeatInterval = DEFAULT_SCAN_REPEAT_INTERVAL;  //每隔X时间重复扫描 (毫秒)
 
     private BleConfig() {
     }

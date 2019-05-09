@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattService;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.vise.baseble.ViseBle;
 import com.vise.baseble.callback.IBleCallback;
@@ -23,7 +24,6 @@ import com.vise.baseble.exception.GattException;
 import com.vise.baseble.exception.TimeoutException;
 import com.vise.baseble.model.BluetoothLeDevice;
 import com.vise.baseble.utils.HexUtil;
-import com.vise.log.ViseLog;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -46,6 +46,7 @@ import static com.vise.baseble.common.BleConstant.MSG_WRITE_DATA_TIMEOUT;
  * @date: 17/8/1 23:11.
  */
 public class DeviceMirror {
+    private static String TAG = "DeviceMirror";
     private final DeviceMirror deviceMirror;
     private final String uniqueSymbol;//唯一符号
     private final BluetoothLeDevice bluetoothLeDevice;//设备基础信息
@@ -104,7 +105,7 @@ public class DeviceMirror {
          */
         @Override
         public void onConnectionStateChange(final BluetoothGatt gatt, final int status, final int newState) {
-            ViseLog.i("onConnectionStateChange  status: " + status + " ,newState: " + newState +
+            Log.i(TAG, "onConnectionStateChange  status: " + status + " ,newState: " + newState +
                     "  ,thread: " + Thread.currentThread());
             if (newState == BluetoothGatt.STATE_CONNECTED) {
                 gatt.discoverServices();
@@ -135,12 +136,12 @@ public class DeviceMirror {
          */
         @Override
         public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
-            ViseLog.i("onServicesDiscovered  status: " + status + "  ,thread: " + Thread.currentThread());
+            Log.i(TAG, "onServicesDiscovered  status: " + status + "  ,thread: " + Thread.currentThread());
             if (handler != null) {
                 handler.removeMessages(MSG_CONNECT_TIMEOUT);
             }
             if (status == 0) {
-                ViseLog.i("onServicesDiscovered connectSuccess.");
+                Log.i(TAG, "onServicesDiscovered connectSuccess.");
                 bluetoothGatt = gatt;
                 connectState = ConnectState.CONNECT_SUCCESS;
                 if (connectCallback != null) {
@@ -161,7 +162,7 @@ public class DeviceMirror {
          */
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, final int status) {
-            ViseLog.i("onCharacteristicRead  status: " + status + ", data:" + HexUtil.encodeHexStr(characteristic.getValue()) +
+            Log.i(TAG, "onCharacteristicRead  status: " + status + ", data:" + HexUtil.encodeHexStr(characteristic.getValue()) +
                     "  ,thread: " + Thread.currentThread());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 handleSuccessData(readInfoMap, characteristic.getValue(), status, true);
@@ -178,7 +179,7 @@ public class DeviceMirror {
          */
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, final int status) {
-            ViseLog.i("onCharacteristicWrite  status: " + status + ", data:" + HexUtil.encodeHexStr(characteristic.getValue()) +
+            Log.i(TAG, "onCharacteristicWrite  status: " + status + ", data:" + HexUtil.encodeHexStr(characteristic.getValue()) +
                     "  ,thread: " + Thread.currentThread());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 handleSuccessData(writeInfoMap, characteristic.getValue(), status, false);
@@ -194,7 +195,7 @@ public class DeviceMirror {
          */
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
-            ViseLog.i("onCharacteristicChanged data:" + HexUtil.encodeHexStr(characteristic.getValue()) +
+            Log.i(TAG, "onCharacteristicChanged data:" + HexUtil.encodeHexStr(characteristic.getValue()) +
                     "  ,thread: " + Thread.currentThread());
             for (Map.Entry<String, IBleCallback> receiveEntry : receiveCallbackMap.entrySet()) {
                 String receiveKey = receiveEntry.getKey();
@@ -217,7 +218,7 @@ public class DeviceMirror {
          */
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, final BluetoothGattDescriptor descriptor, final int status) {
-            ViseLog.i("onDescriptorRead  status: " + status + ", data:" + HexUtil.encodeHexStr(descriptor.getValue()) +
+            Log.i(TAG, "onDescriptorRead  status: " + status + ", data:" + HexUtil.encodeHexStr(descriptor.getValue()) +
                     "  ,thread: " + Thread.currentThread());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 handleSuccessData(readInfoMap, descriptor.getValue(), status, true);
@@ -234,7 +235,7 @@ public class DeviceMirror {
          */
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, final BluetoothGattDescriptor descriptor, final int status) {
-            ViseLog.i("onDescriptorWrite  status: " + status + ", data:" + HexUtil.encodeHexStr(descriptor.getValue()) +
+            Log.i(TAG, "onDescriptorWrite  status: " + status + ", data:" + HexUtil.encodeHexStr(descriptor.getValue()) +
                     "  ,thread: " + Thread.currentThread());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 handleSuccessData(writeInfoMap, descriptor.getValue(), status, false);
@@ -256,7 +257,7 @@ public class DeviceMirror {
          */
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-            ViseLog.i("onReadRemoteRssi  status: " + status + ", rssi:" + rssi +
+            Log.i(TAG, "onReadRemoteRssi  status: " + status + ", rssi:" + rssi +
                     "  ,thread: " + Thread.currentThread());
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (rssiCallback != null) {
@@ -284,7 +285,7 @@ public class DeviceMirror {
     public synchronized void connect(IConnectCallback connectCallback) {
         if (connectState == ConnectState.CONNECT_SUCCESS || connectState == ConnectState.CONNECT_PROCESS
                 || (connectState == ConnectState.CONNECT_INIT && connectRetryCount != 0)) {
-            ViseLog.e("this connect state is connecting, connectSuccess or current retry count less than config connect retry count.");
+            Log.e(TAG, "this connect state is connecting, connectSuccess or current retry count less than config connect retry count.");
             return;
         }
         if (handler != null) {
@@ -356,7 +357,7 @@ public class DeviceMirror {
      */
     public void writeData(byte[] data) {
         if (data == null || data.length > 20) {
-            ViseLog.e("this data is null or length beyond 20 byte.");
+            Log.e(TAG, "this data is null or length beyond 20 byte.");
             return;
         }
         if (!checkBluetoothGattInfo(writeInfoMap)) {
@@ -647,11 +648,11 @@ public class DeviceMirror {
             final Method refresh = BluetoothGatt.class.getMethod("refresh");
             if (refresh != null && bluetoothGatt != null) {
                 final boolean success = (Boolean) refresh.invoke(getBluetoothGatt());
-                ViseLog.i("Refreshing result: " + success);
+                Log.i(TAG, "Refreshing result: " + success);
                 return success;
             }
         } catch (Exception e) {
-            ViseLog.e("An exception occured while refreshing device" + e);
+            Log.e(TAG, "An exception occured while refreshing device" + e);
         }
         return false;
     }
@@ -692,7 +693,7 @@ public class DeviceMirror {
      * 清除设备资源，在不使用该设备时调用
      */
     public synchronized void clear() {
-        ViseLog.i("deviceMirror clear.");
+        Log.i(TAG, "deviceMirror clear.");
         disconnect();
         refreshDeviceCache();
         close();
@@ -734,7 +735,7 @@ public class DeviceMirror {
      */
     private boolean checkBluetoothGattInfo(HashMap<String, BluetoothGattChannel> bluetoothGattInfoHashMap) {
         if (bluetoothGattInfoHashMap == null || bluetoothGattInfoHashMap.size() == 0) {
-            ViseLog.e("this bluetoothGattInfo map is not value.");
+            Log.e(TAG, "this bluetoothGattInfo map is not value.");
             return false;
         }
         return true;
@@ -869,7 +870,7 @@ public class DeviceMirror {
                 handler.removeMessages(MSG_CONNECT_TIMEOUT);
                 handler.sendEmptyMessageDelayed(MSG_CONNECT_RETRY, BleConfig.getInstance().getConnectRetryInterval());
             }
-            ViseLog.i("connectFailure connectRetryCount is " + connectRetryCount);
+            Log.i(TAG, "connectFailure connectRetryCount is " + connectRetryCount);
         } else {
             if (bleException instanceof TimeoutException) {
                 connectState = ConnectState.CONNECT_TIMEOUT;
@@ -880,7 +881,7 @@ public class DeviceMirror {
             if (connectCallback != null) {
                 connectCallback.onConnectFailure(bleException);
             }
-            ViseLog.i("connectFailure " + bleException);
+            Log.i(TAG, "connectFailure " + bleException);
         }
     }
 
@@ -897,10 +898,10 @@ public class DeviceMirror {
                 handler.removeMessages(MSG_RECEIVE_DATA_TIMEOUT);
                 handler.sendEmptyMessageDelayed(MSG_RECEIVE_DATA_RETRY, BleConfig.getInstance().getOperateRetryInterval());
             }
-            ViseLog.i("enableFailure receiveDataRetryCount is " + receiveDataRetryCount);
+            Log.i(TAG, "enableFailure receiveDataRetryCount is " + receiveDataRetryCount);
         } else {
             handleFailureData(enableInfoMap, bleException, isRemoveCall);
-            ViseLog.i("enableFailure " + bleException);
+            Log.i(TAG, "enableFailure " + bleException);
         }
     }
 
@@ -917,10 +918,10 @@ public class DeviceMirror {
                 handler.removeMessages(MSG_READ_DATA_TIMEOUT);
                 handler.sendEmptyMessageDelayed(MSG_READ_DATA_RETRY, BleConfig.getInstance().getOperateRetryInterval());
             }
-            ViseLog.i("readFailure readDataRetryCount is " + readDataRetryCount);
+            Log.i(TAG, "readFailure readDataRetryCount is " + readDataRetryCount);
         } else {
             handleFailureData(readInfoMap, bleException, isRemoveCall);
-            ViseLog.i("readFailure " + bleException);
+            Log.i(TAG, "readFailure " + bleException);
         }
     }
 
@@ -937,10 +938,10 @@ public class DeviceMirror {
                 handler.removeMessages(MSG_WRITE_DATA_TIMEOUT);
                 handler.sendEmptyMessageDelayed(MSG_WRITE_DATA_RETRY, BleConfig.getInstance().getOperateRetryInterval());
             }
-            ViseLog.i("writeFailure writeDataRetryCount is " + writeDataRetryCount);
+            Log.i(TAG, "writeFailure writeDataRetryCount is " + writeDataRetryCount);
         } else {
             handleFailureData(writeInfoMap, bleException, isRemoveCall);
-            ViseLog.i("writeFailure " + bleException);
+            Log.i(TAG, "writeFailure " + bleException);
         }
     }
 
